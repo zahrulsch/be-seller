@@ -1,0 +1,20 @@
+*::-webkit-scrollbar {
+  width: 7px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff9d !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(202, 202, 202) !important;
+  border-radius: 3px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgb(131, 131, 131) !important;
+}
+
+#app {
+  overflow: hidden;
+}
