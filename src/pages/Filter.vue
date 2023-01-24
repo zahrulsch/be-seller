@@ -165,9 +165,9 @@ watch(
 				<template #extra>
 					<Space v-show="pending">
 						<Spin size="small" />
-						<TypographyText type="secondary" style="font-weight: 400"
-							>Sedang memuat config dari shopee..</TypographyText
-						>
+						<TypographyText type="secondary" style="font-weight: 400">
+							Sedang memuat config dari shopee..
+						</TypographyText>
 					</Space>
 				</template>
 				<div class="card_filter">

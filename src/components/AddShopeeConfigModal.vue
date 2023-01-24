@@ -24,6 +24,9 @@ const name = ref<string>("");
 		:visible="props.show"
 		@update:visible="(v) => emits('update:show', v)"
 		cancel-text="Batal"
+		:mask-style="{
+			backgroundColor: '#e5e5e573',
+		}"
 		transition-name=""
 		@ok="
 			() => {

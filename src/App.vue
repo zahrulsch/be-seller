@@ -24,6 +24,5 @@ onMounted(() => {
 .v-enter-from,
 .v-leave-to {
 	opacity: 0;
-	filter: blur(5px);
 }
 </style>
