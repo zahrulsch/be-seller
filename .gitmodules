@@ -1,0 +1,3 @@
+[submodule "src-tauri/auto_request"]
+	path = src-tauri/auto_request
+	url = https://github.com/zahrulsch/auto-request.git

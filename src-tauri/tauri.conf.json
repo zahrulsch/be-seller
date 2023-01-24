@@ -59,7 +59,7 @@
     },
     "windows": [
       {
-        "maximized": false,
+        "maximized": true,
         "height": 800,
         "resizable": true,
         "title": "Be Seller",

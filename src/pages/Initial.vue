@@ -51,7 +51,7 @@ const secondaryMenus = [
 <template>
 	<div class="container">
 		<div class="primer_container">
-			<TypographyTitle :level="5">Daftar Fitur</TypographyTitle>
+			<TypographyTitle :level="5">Daftar Menu</TypographyTitle>
 			<Space size="middle">
 				<RouterLink :to="menu.uri" v-for="menu in menus" :key="menu.title">
 					<Card :title="menu.title" size="small" hoverable class="menu_card">
@@ -80,7 +80,7 @@ const secondaryMenus = [
 				</RouterLink>
 			</Space>
 			<Divider dashed />
-			<TypographyTitle :level="5">Pengaturan Big Seller</TypographyTitle>
+			<TypographyTitle :level="5">Fitur Big Seller</TypographyTitle>
 			<Space size="middle">
 				<Card
 					v-for="menu in secondaryMenus"

@@ -1,4 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { invoke } from "@tauri-apps/api";
+import { onMounted } from "vue";
+
+onMounted(() => {
+	invoke("run_migration");
+});
+</script>
 
 <template>
 	<RouterView v-slot="{ Component }">
@@ -11,7 +18,7 @@
 <style>
 .v-enter-active,
 .v-leave-active {
-	transition: 0.15s linear;
+	transition: 0.1s linear;
 }
 
 .v-enter-from,
