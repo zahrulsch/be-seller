@@ -78,6 +78,7 @@ const { config } = useGetConfig();
 					v-model:value="payload.thread_size"
 					placeholder="1"
 					addon-before="Thread Count"
+					:max="25"
 				/>
 				<InputNumber
 					v-model:value="payload.limit_product"
