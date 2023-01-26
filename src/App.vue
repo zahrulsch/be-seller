@@ -2,7 +2,7 @@
 import { invoke } from "@tauri-apps/api";
 import { onMounted } from "vue";
 
-onMounted(() => {
+onMounted(async () => {
 	invoke("run_migration");
 });
 </script>

@@ -7,6 +7,7 @@ mod prelude;
 mod error;
 mod state;
 mod ipc;
+mod background;
 
 use std::sync::Arc;
 use sea_orm::Database;
@@ -17,12 +18,14 @@ use ipc::{
     remove_config_shopee, 
     run_migration, 
     get_config_shopee,
-    get_filter_config
+    get_filter_config,
+    crawl_by_keywords
 };
 
 #[tokio::main]
 async fn main() {
-    let Ok(connection) = Database::connect("postgres://postgres:postgres@localhost:5432/postgres" ).await else {
+    let database_url = "postgres://postgres:postgres@localhost:5432/postgres";
+    let Ok(connection) = Database::connect(database_url).await else {
         println!("Gagal init koneksi ke database");
         return
     };
@@ -39,8 +42,9 @@ async fn main() {
             get_config_shopee,
             edit_config_shopee,
             add_config_shopee,
-            remove_config_shopee
+            remove_config_shopee,
+            crawl_by_keywords
         ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .expect("error while running be seller application");
 }

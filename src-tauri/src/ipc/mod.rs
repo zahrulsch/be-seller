@@ -4,6 +4,15 @@ mod remove_config_shopee;
 mod run_migration;
 mod get_config_shopee;
 mod get_filter_config;
+mod crawl_by_keywords;
+
+pub use edit_config_shopee::edit_config_shopee;
+pub use add_config_shopee::add_config_shopee;
+pub use remove_config_shopee::remove_config_shopee;
+pub use run_migration::run_migration;
+pub use get_config_shopee::get_config_shopee;
+pub use get_filter_config::get_filter_config;
+pub use crawl_by_keywords::crawl_by_keywords;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct ConfigShopeePayload {
@@ -21,10 +30,3 @@ pub struct ConfigShopeePayload {
     pub id: i32,
     pub created_at: Option<String>
 }
-
-pub use edit_config_shopee::edit_config_shopee;
-pub use add_config_shopee::add_config_shopee;
-pub use remove_config_shopee::remove_config_shopee;
-pub use run_migration::run_migration;
-pub use get_config_shopee::get_config_shopee;
-pub use get_filter_config::get_filter_config;

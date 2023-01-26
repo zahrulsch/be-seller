@@ -1,0 +1,48 @@
+use crate::{prelude::*, state::State, error::InvalidArgument};
+use entity::config;
+use sea_orm::EntityTrait;
+use crate::background::{runner_keyword, RunnerKeywordData};
+
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
+pub struct CrawlByKeywordsPayload {
+    pub keywords: Vec<String>,
+    pub thread_size: u8,
+    pub name: String,
+    pub limit_product: u16,
+    pub config_id: i8
+}
+
+#[tauri::command]
+pub async fn crawl_by_keywords(state: State<'_>, data: CrawlByKeywordsPayload) -> Result<String> {
+    let CrawlByKeywordsPayload {
+        config_id,
+        keywords,
+        limit_product,
+        name,
+        mut thread_size
+    } = data;
+    let msg_err = "terdapat argument kosong / tidak sesuai";
+    let db = state.db.clone();
+
+    if config_id < 1 { return Err(InvalidArgument::create_error("config_id", msg_err)); }
+    if keywords.is_empty() { return Err(InvalidArgument::create_error("keyword_length", msg_err)); }
+    if limit_product < 1 { return Err(InvalidArgument::create_error("zero_limit_product", msg_err)); }
+    if name.is_empty() { return Err(InvalidArgument::create_error("empty_name", msg_err)); }
+    if thread_size < 1 { thread_size = 5 }
+
+    let Some(cfg) = config::Entity::find_by_id(config_id as i64).one(&*db).await? else {
+        return Err(InvalidArgument::create_error("config not found", msg_err));
+    };
+    
+    tokio::spawn( async move {
+        runner_keyword(RunnerKeywordData { 
+            model: cfg, 
+            keywords, 
+            thread_size, 
+            name, 
+            limit_product 
+        }).await;
+    });
+
+    Ok("task berhasil dijalankan".into())
+}
