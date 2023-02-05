@@ -1,6 +1,6 @@
 use crate::{prelude::*, state::State, error::InvalidArgument};
-use entity::config;
-use sea_orm::EntityTrait;
+use entity::{config, collection};
+use sea_orm::{EntityTrait, Set};
 use crate::background::{runner_keyword, RunnerKeywordData};
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
@@ -33,14 +33,23 @@ pub async fn crawl_by_keywords(state: State<'_>, data: CrawlByKeywordsPayload) -
     let Some(cfg) = config::Entity::find_by_id(config_id as i64).one(&*db).await? else {
         return Err(InvalidArgument::create_error("config not found", msg_err));
     };
+
+    let coll = collection::ActiveModel {
+        config_id: Set(cfg.id),
+        name: Set(name.clone()),
+        ..Default::default()   
+    };
+
+    let coll = collection::Entity::insert(coll).exec_with_returning(&*db).await?;
     
     tokio::spawn( async move {
         runner_keyword(RunnerKeywordData { 
-            model: cfg, 
             keywords, 
             thread_size, 
             name, 
-            limit_product 
+            limit_product,
+            config: cfg,
+            collection: coll
         }).await;
     });
 
