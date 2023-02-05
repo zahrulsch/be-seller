@@ -23,6 +23,8 @@ auto_requester = { path = "auto_request" }
 migration = { path = "migration" }
 entity = { path = "entity" }
 thiserror = "1.0.38"
+async-mutex = "1.4.0"
+urlencoding = "2.1.2"
 
 
 [features]
