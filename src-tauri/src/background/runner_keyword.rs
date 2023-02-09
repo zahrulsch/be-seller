@@ -1,4 +1,4 @@
-use entity::{config::Model, collection};
+use entity::{config::Model, collection, collection_product};
 use std::{sync::Arc, collections::HashMap};
 use std::iter;
 use tokio::{sync::mpsc, task::JoinHandle};
@@ -6,6 +6,7 @@ use auto_requester::{Shopee, CommonRequester, UrlType, ReqMethod, model_translat
 use async_mutex::Mutex;
 use serde_json::Value;
 use urlencoding::encode;
+use sea_orm::{Set, ActiveModelTrait, DatabaseConnection};
 
 #[derive(Debug, Clone)]
 struct Uri {
@@ -134,6 +135,35 @@ fn filter_applier(items: Vec<Vec<Item>>, config_filter: Model) -> Vec<Item> {
     temporary_products
 }
 
+fn item_to_model(items: Vec<Item>, collection: &collection::Model) -> Vec<collection_product::ActiveModel> {
+    let col_id = collection.id;
+
+    items.iter()
+        .map(|item| {
+            let item_url = format!(
+                "https://shopee.co.id/{}-i.{}.{}",
+                encode(&item.item_basic.name),
+                item.item_basic.shopid,
+                item.item_basic.itemid
+            );
+
+            let item_model = collection_product::ActiveModel {
+                collection_id: Set(col_id),
+                item_id: Set(item.item_basic.itemid),
+                shop_id: Set(item.item_basic.shopid),
+                name: Set(item.item_basic.name.clone()),
+                sold: Set(Some(item.item_basic.historical_sold)),
+                view: Set(Some(0)),
+                price_max: Set(Some(item.item_basic.price_max/100_000)),
+                price_min: Set(Some(item.item_basic.price_min/100_000)),
+                url: Set(item_url),
+                thumbnail: Set(Some(format!("https://cf.shopee.co.id/file/{}", item.item_basic.image)))
+            };
+            item_model
+        })
+        .collect::<Vec<_>>()
+}
+
 #[derive(Debug, Clone)]
 pub struct RunnerKeywordData {
     pub config: Model,
@@ -152,9 +182,11 @@ pub struct ChannelData {
     pub newest: usize,
 }
 
-pub async fn runner_keyword(data: RunnerKeywordData) {
+pub async fn runner_keyword(data: RunnerKeywordData, connection: &DatabaseConnection) {
     let chunks = self::chunker(data.keywords.clone(), data.thread_size.into());
     let channel_data = Arc::new(Mutex::new(Vec::<ChannelData>::new()));
+    let product_inputed = Arc::new(Mutex::new(0));
+    let limit = data.limit_product;
     
     // Mulai dari sini akan diloop sync per halaman
     'outer: for page in 1..=2000 {
@@ -284,7 +316,28 @@ pub async fn runner_keyword(data: RunnerKeywordData) {
             process.await.unwrap()
         }
 
-        filter_applier(products.lock().await.to_vec(), data.clone().config);
+        let items = filter_applier(products.lock().await.to_vec(), data.clone().config);
+        let item_models = item_to_model(items, &data.collection);
+
+        for item_model in item_models {
+            let mut counter = product_inputed.lock().await;
+
+            if *counter < limit {
+                match item_model.insert(connection).await {
+                    Ok(i) => {
+                        println!("{} - ditambahkan dengan id: {}", i.name, i.item_id);
+                        *counter += 1;
+                    },
+                    Err(e) => {
+                        eprintln!("Gagal menambahkan produk: {:?}", e);
+                    }
+                }
+            } else {
+                println!("Limit sudah tercapai...");
+                break 'outer;
+            }
+
+        }
 
         if products.lock().await.is_empty() {
             break 'outer;

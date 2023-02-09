@@ -8,16 +8,17 @@ impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         let sql = r#"
             CREATE TABLE IF NOT EXISTS collection_product (
-                item_id int not null,
-                url varchar(200) not null,
-                name varchar(200) not null,
-                thumbnail varchar(200),
-                view int,
-                sold int,
-                price_min int,
-                price_max int,
+                item_id bigint not null,
+                shop_id bigint not null,
+                url text not null,
+                name text not null,
+                thumbnail text,
+                view bigint,
+                sold bigint,
+                price_min bigint,
+                price_max bigint,
                 collection_id serial,
-                primary key(item_id),
+                primary key(item_id, collection_id),
                 constraint fk_collection_id
                     foreign key(collection_id)
                         references collection(id)

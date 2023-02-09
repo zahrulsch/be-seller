@@ -1,8 +1,8 @@
 [package]
 name = "big-seller"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Marketplace Management App"
+authors = ["mantracode@yahoo.com"]
 license = ""
 repository = ""
 edition = "2021"
@@ -22,6 +22,7 @@ sea-orm = { version = "^0", features = [ "sqlx-postgres", "with-json", "postgres
 auto_requester = { path = "auto_request" }
 migration = { path = "migration" }
 entity = { path = "entity" }
+bigseller-client = { path = "bigseller_client" } 
 thiserror = "1.0.38"
 async-mutex = "1.4.0"
 urlencoding = "2.1.2"

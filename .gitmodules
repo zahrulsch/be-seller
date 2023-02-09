@@ -1,3 +1,6 @@
 [submodule "src-tauri/auto_request"]
 	path = src-tauri/auto_request
 	url = https://github.com/zahrulsch/auto-request.git
+[submodule "src-tauri/bigseller_client"]
+	path = src-tauri/bigseller_client
+	url = https://github.com/zahrulsch/bigseller-client.git

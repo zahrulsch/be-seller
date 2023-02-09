@@ -3,24 +3,19 @@
     windows_subsystem = "windows"
 )]
 
-mod prelude;
-mod error;
-mod state;
-mod ipc;
 mod background;
+mod error;
+mod ipc;
+mod prelude;
+mod state;
 
-use std::sync::Arc;
+use ipc::{
+    add_config_shopee, crawl_by_keywords, edit_config_shopee, get_config_shopee,
+    get_data_login_bigseller, get_filter_config, remove_config_shopee, run_migration,
+};
 use sea_orm::Database;
 use state::OhMyState;
-use ipc::{
-    edit_config_shopee, 
-    add_config_shopee, 
-    remove_config_shopee, 
-    run_migration, 
-    get_config_shopee,
-    get_filter_config,
-    crawl_by_keywords
-};
+use std::sync::Arc;
 
 #[tokio::main]
 async fn main() {
@@ -31,7 +26,7 @@ async fn main() {
     };
 
     let state = OhMyState {
-        db: Arc::new(connection)
+        db: Arc::new(connection),
     };
 
     tauri::Builder::default()
@@ -43,7 +38,8 @@ async fn main() {
             edit_config_shopee,
             add_config_shopee,
             remove_config_shopee,
-            crawl_by_keywords
+            crawl_by_keywords,
+            get_data_login_bigseller
         ])
         .run(tauri::generate_context!())
         .expect("error while running be seller application");

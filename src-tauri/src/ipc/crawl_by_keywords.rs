@@ -50,7 +50,7 @@ pub async fn crawl_by_keywords(state: State<'_>, data: CrawlByKeywordsPayload) -
             limit_product,
             config: cfg,
             collection: coll
-        }).await;
+        }, &db).await;
     });
 
     Ok("task berhasil dijalankan".into())

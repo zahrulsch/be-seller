@@ -6,14 +6,16 @@ use sea_orm::entity::prelude::*;
 #[sea_orm(table_name = "collection_product")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
-    pub item_id: i32,
+    pub item_id: i64,
+    pub shop_id: i64,
     pub url: String,
     pub name: String,
     pub thumbnail: Option<String>,
-    pub view: Option<i32>,
-    pub sold: Option<i32>,
-    pub price_min: Option<i32>,
-    pub price_max: Option<i32>,
+    pub view: Option<i64>,
+    pub sold: Option<i64>,
+    pub price_min: Option<i64>,
+    pub price_max: Option<i64>,
+    #[sea_orm(primary_key)]
     pub collection_id: i32,
 }
 
