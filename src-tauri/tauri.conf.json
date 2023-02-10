@@ -18,12 +18,8 @@
         "open": true
       },
       "fs": {
-        "scope": ["$RESOURCE/*"],
-        "createDir": true,
-        "readDir": true,
-        "exists": true,
-        "readFile": true,
-        "writeFile": true
+        "scope": ["**"],
+        "all": true
       },
       "path": {
         "all": true

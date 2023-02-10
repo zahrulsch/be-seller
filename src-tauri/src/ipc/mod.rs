@@ -4,6 +4,7 @@ mod edit_config_shopee;
 mod get_config_shopee;
 mod get_data_login_bigseller;
 mod get_filter_config;
+mod login_bigseller;
 mod remove_config_shopee;
 mod run_migration;
 
@@ -13,6 +14,7 @@ pub use edit_config_shopee::edit_config_shopee;
 pub use get_config_shopee::get_config_shopee;
 pub use get_data_login_bigseller::get_data_login_bigseller;
 pub use get_filter_config::get_filter_config;
+pub use login_bigseller::login_bigseller;
 pub use remove_config_shopee::remove_config_shopee;
 pub use run_migration::run_migration;
 

@@ -9,15 +9,40 @@ import {
   InputPassword,
   Spin,
   Button,
+  notification,
+  message,
 } from "ant-design-vue";
 import { ref, watch } from "vue";
 import { getBigSellerPreLoginData } from "../utils/getBigSellerPreLoginData";
+import { loginBigSeller, LoginBigSeller } from "../utils/loginBigSeller";
 
 const image = ref("");
 const { invoker, pending } = getBigSellerPreLoginData({
-  onError: console.log,
   onSuccess: (data) => {
     image.value = data.v_code_response.data;
+    payload.value.cookie_string = data.cookies;
+  },
+});
+
+const { invoker: loginProcess } = loginBigSeller({
+  onError: (e) => {
+    console.log(e);
+    invoker();
+    notification.error({
+      message: e.name,
+      description: e.cause,
+      placement: "bottomRight",
+    });
+  },
+  onSuccess: () => {
+    payload.value = {
+      captcha: "",
+      cookie_string: "",
+      email: "",
+      password: "",
+    };
+    invoker();
+    message.success("Login berhasil silahkan lanjutkan proses", 2.4);
   },
 });
 
@@ -32,11 +57,25 @@ interface Emit {
 const props = defineProps<Prop>();
 const emits = defineEmits<Emit>();
 
+const payload = ref<LoginBigSeller>({
+  captcha: "",
+  cookie_string: "",
+  email: "",
+  password: "",
+});
+
 watch(
   () => props.show,
   (s) => {
     if (s) {
       invoker();
+    } else {
+      payload.value = {
+        captcha: "",
+        cookie_string: "",
+        email: "",
+        password: "",
+      };
     }
   }
 );
@@ -50,11 +89,24 @@ watch(
     title="Tambahkan Akun Big Seller"
     style="width: 380px"
     ok-text="Simpan"
-    cancel-text="Batal"
+    cancel-text="Kembali"
+    @ok="
+      () => {
+        loginProcess({ ...payload });
+      }
+    "
   >
     <Space style="width: 100%" direction="vertical">
-      <Input addon-before="Email" placeholder="son_goku@yahoo.com" />
-      <InputPassword placeholder="••••••••" addon-before="Password" />
+      <Input
+        v-model:value="payload.email"
+        addon-before="Email"
+        placeholder="son_goku@yahoo.com"
+      />
+      <InputPassword
+        v-model:value="payload.password"
+        placeholder="••••••••"
+        addon-before="Password"
+      />
       <Divider style="margin-block: 4px">
         <TypographyText style="font-size: 13px; font-weight: 400">
           Masukan Captcha
@@ -71,8 +123,7 @@ watch(
         style="border-radius: 2px"
         :preview="false"
       />
-      <Input addon-before="Captcha"> </Input>
-      <Button block type="primary" ghost>Coba Masuk</Button>
+      <Input v-model:value="payload.captcha" addon-before="Captcha"> </Input>
     </Space>
   </Modal>
 </template>

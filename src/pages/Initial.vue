@@ -6,7 +6,7 @@ import {
   TypographyTitle,
   Space,
 } from "ant-design-vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import config from "../assets/process.png";
 import keyword from "../assets/keyword.png";
 import category from "../assets/category.png";

@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use auto_requester::error::OhMyError as AutoRequestError;
 use bigseller_client::error::OhMyError as BigSellerError;
 use sea_orm::DbErr;
@@ -48,6 +50,20 @@ pub enum OhMyError {
     Arguments(#[from] InvalidArgument),
     #[error("big seller error")]
     BigSellerClient(#[from] BigSellerError),
+    #[error("stable error")]
+    StableError { cause: String, name: String },
+}
+
+impl OhMyError {
+    pub fn new<T>(name: T, cause: T) -> Self
+    where
+        T: Into<String>,
+    {
+        Self::StableError {
+            cause: cause.into(),
+            name: name.into(),
+        }
+    }
 }
 
 impl Serialize for OhMyError {
@@ -71,8 +87,12 @@ impl Serialize for OhMyError {
                 seq.serialize_field("cause", &e)?;
             }
             OhMyError::BigSellerClient(bse) => {
-                seq.serialize_field("name", "arguments error")?;
+                seq.serialize_field("name", "bigseller error")?;
                 seq.serialize_field("cause", &bse.to_string())?;
+            }
+            OhMyError::StableError { cause, name } => {
+                seq.serialize_field("name", name)?;
+                seq.serialize_field("cause", cause)?;
             }
         }
 

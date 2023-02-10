@@ -1,30 +1,31 @@
 import { ref } from "vue"
 import { invoke } from "@tauri-apps/api"
+import { AppError } from "./errortype"
 
-interface BigSellerPreLoginData {
-    cookies: string
-    v_code_response: {
-        code: number
-        data: string
-        msg: any
-    }
+export type LoginBigSeller = {
+    email: string
+    password: string
+    captcha: string
+    cookie_string: string
 }
 
-export const getBigSellerPreLoginData = (options?: {
-    onSuccess?: (msg: BigSellerPreLoginData) => void
-    onError?: (e: any) => void
+export const loginBigSeller = (options?: {
+    onSuccess?: (msg: string) => void
+    onError?: (e: AppError) => void
 }) => {
     const pending = ref(false)
     const errorString = ref<null | string>(null)
-    const data = ref<null | BigSellerPreLoginData>(null)
+    const data = ref<null | string>(null)
 
-    const invoker = async () => {
+    const invoker = async (payload: LoginBigSeller) => {
         pending.value = true
 
         try {
-            const response = await invoke<BigSellerPreLoginData>(
-                "get_data_login_bigseller"
-            )
+            const response = await invoke<string>("login_bigseller", {
+                payload: {
+                    ...payload,
+                },
+            })
 
             errorString.value = null
             data.value = response
@@ -34,7 +35,7 @@ export const getBigSellerPreLoginData = (options?: {
             errorString.value = JSON.stringify(e)
             data.value = null
 
-            options?.onError?.(e)
+            options?.onError?.(e as AppError)
         } finally {
             pending.value = false
         }

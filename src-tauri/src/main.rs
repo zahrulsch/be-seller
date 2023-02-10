@@ -8,10 +8,12 @@ mod error;
 mod ipc;
 mod prelude;
 mod state;
+mod utils;
 
 use ipc::{
     add_config_shopee, crawl_by_keywords, edit_config_shopee, get_config_shopee,
-    get_data_login_bigseller, get_filter_config, remove_config_shopee, run_migration,
+    get_data_login_bigseller, get_filter_config, login_bigseller, remove_config_shopee,
+    run_migration,
 };
 use sea_orm::Database;
 use state::OhMyState;
@@ -39,7 +41,8 @@ async fn main() {
             add_config_shopee,
             remove_config_shopee,
             crawl_by_keywords,
-            get_data_login_bigseller
+            get_data_login_bigseller,
+            login_bigseller
         ])
         .run(tauri::generate_context!())
         .expect("error while running be seller application");

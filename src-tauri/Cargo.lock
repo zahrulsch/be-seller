@@ -348,6 +348,7 @@ dependencies = [
  "bigseller-client",
  "entity",
  "migration",
+ "regex",
  "sea-orm",
  "serde",
  "serde_json",
