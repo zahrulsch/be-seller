@@ -17,16 +17,21 @@ pub async fn login_bigseller(app: AppHandle, payload: LoginPayload) -> Result<St
     let base_dir = app.path_resolver().resource_dir();
 
     let Some(resource_path) = base_dir else {
-        return Err(OhMyError::new("path_error", "folder resource tidak ditemukan"))
+        return Err(OhMyError::new("path error", "folder resource tidak ditemukan"))
     };
+
+    println!("{:?}", fs::canonicalize(&resource_path).await.unwrap());
 
     let save_path = resource_path.join("sessions");
 
-    if !save_path.exists() && fs::create_dir_all(&save_path).await.is_err() {
-        return Err(OhMyError::new(
-            "path_error",
-            "gagal membuat folder sessions",
-        ));
+    if !save_path.exists() {
+        match fs::create_dir_all(&save_path).await {
+            Ok(_) => {},
+            Err(e) => {
+                println!("{:?}", e);
+                return Err(OhMyError::new("path error", "gagal membuat folder sessions"))
+            }
+        }
     }
 
     let email_to_path = Utils::email_to_path(&payload.email)?;
