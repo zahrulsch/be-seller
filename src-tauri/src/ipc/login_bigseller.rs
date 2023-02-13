@@ -20,16 +20,16 @@ pub async fn login_bigseller(app: AppHandle, payload: LoginPayload) -> Result<St
         return Err(OhMyError::new("path error", "folder resource tidak ditemukan"))
     };
 
-    println!("{:?}", fs::canonicalize(&resource_path).await.unwrap());
-
     let save_path = resource_path.join("sessions");
 
     if !save_path.exists() {
         match fs::create_dir_all(&save_path).await {
-            Ok(_) => {},
+            Ok(_) => {}
             Err(e) => {
-                println!("{:?}", e);
-                return Err(OhMyError::new("path error", "gagal membuat folder sessions"))
+                return Err(OhMyError::new(
+                    "path error: gagal membuat session folder",
+                    &e.to_string(),
+                ))
             }
         }
     }

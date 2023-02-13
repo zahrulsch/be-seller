@@ -18,7 +18,7 @@ winres = "0.1.12"
 serde_json = "1.0"
 tokio = { version = "1.24.2", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2", features = ["fs-all", "path-all", "shell-open"] }
+tauri = { version = "1.2", features = ["fs-create-dir", "fs-exists", "fs-read-dir", "fs-read-file", "fs-remove-file", "fs-write-file", "path-all", "shell-open"] }
 sea-orm = { version = "^0", features = [ "sqlx-postgres", "with-json", "postgres-array", "runtime-tokio-rustls", "macros" ] }
 auto_requester = { path = "auto_request" }
 migration = { path = "migration" }
@@ -41,3 +41,8 @@ default = ["custom-protocol"]
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
 
+[profile.release]
+opt-level = "z"
+strip = true
+codegen-units = 16
+debug = false

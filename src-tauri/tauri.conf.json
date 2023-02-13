@@ -10,6 +10,7 @@
     "productName": "Be Seller",
     "version": "1.0.0"
   },
+  
   "tauri": {
     "allowlist": {
       "all": false,
@@ -18,8 +19,12 @@
         "open": true
       },
       "fs": {
-        "scope": ["**"],
-        "all": true
+        "createDir": true,
+        "exists": true,
+        "readDir": true,
+        "readFile": true,
+        "removeFile": true,
+        "writeFile": true
       },
       "path": {
         "all": true
@@ -57,7 +62,8 @@
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
         "timestampUrl": ""
-      }
+      },
+      "publisher": "Mantracode"
     },
     "security": {
       "csp": null
