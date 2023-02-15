@@ -94,6 +94,9 @@ watch(
 				loginProcess({ ...payload });
 			}
 		"
+		:mask-style="{
+			backgroundColor: 'rgba(0, 0, 0, .08)',
+		}"
 	>
 		<Space style="width: 100%" direction="vertical">
 			<Input

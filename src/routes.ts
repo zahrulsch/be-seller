@@ -9,6 +9,10 @@ const rutes: RouteRecordRaw[] = [
     path: "/config",
     component: () => import("./pages/Filter.vue"),
   },
+  {
+    path: "/bs-upload",
+    component: () => import("./pages/BsUpload.vue"),
+  },
 ];
 
 export const routes = createRouter({

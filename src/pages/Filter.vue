@@ -405,7 +405,7 @@ watch(
 								message.destroy();
 							}
 						"
-						>Batal</Button
+						>Kembali</Button
 					>
 				</Space>
 			</Card>

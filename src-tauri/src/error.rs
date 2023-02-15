@@ -5,6 +5,7 @@ use bigseller_client::error::OhMyError as BigSellerError;
 use sea_orm::DbErr;
 use serde::{ser::SerializeStruct, Serialize};
 use thiserror::Error;
+use tokio::io::Error as TokioIoError;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize, Error)]
 pub struct InvalidArgument {
@@ -52,6 +53,8 @@ pub enum OhMyError {
     BigSellerClient(#[from] BigSellerError),
     #[error("stable error")]
     StableError { cause: String, name: String },
+    #[error("tokio io error")]
+    TokioIo(#[from] TokioIoError)
 }
 
 impl OhMyError {
@@ -94,6 +97,10 @@ impl Serialize for OhMyError {
                 seq.serialize_field("name", name)?;
                 seq.serialize_field("cause", cause)?;
             }
+            OhMyError::TokioIo(e) => {
+                seq.serialize_field("name", "tokio io error")?;
+                seq.serialize_field("cause", &e.to_string())?;
+            },
         }
 
         seq.end()

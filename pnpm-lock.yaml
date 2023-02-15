@@ -3,10 +3,14 @@ lockfileVersion: 5.4
 specifiers:
   '@tauri-apps/api': ^1.2.0
   '@tauri-apps/cli': ^1.2.2
+  '@types/lodash': ^4.14.191
   '@types/node': ^18.7.10
+  '@vicons/carbon': ^0.12.0
   '@vitejs/plugin-vue': ^4.0.0
   ant-design-vue: ^3.2.15
+  dayjs: ^1.11.7
   include-media: ^1.4.10
+  lodash: ^4.17.21
   sass: ^1.57.1
   typescript: ^4.6.4
   vite: ^4.0.0
@@ -17,12 +21,16 @@ specifiers:
 dependencies:
   '@tauri-apps/api': 1.2.0
   ant-design-vue: 3.2.15_vue@3.2.45
+  dayjs: 1.11.7
+  lodash: 4.17.21
   vue: 3.2.45
   vue-router: 4.1.6_vue@3.2.45
 
 devDependencies:
   '@tauri-apps/cli': 1.2.3
+  '@types/lodash': 4.14.191
   '@types/node': 18.11.18
+  '@vicons/carbon': 0.12.0
   '@vitejs/plugin-vue': 4.0.0_vite@4.0.4+vue@3.2.45
   include-media: 1.4.10
   sass: 1.57.1
@@ -394,8 +402,16 @@ packages:
       '@tauri-apps/cli-win32-x64-msvc': 1.2.3
     dev: true
 
+  /@types/lodash/4.14.191:
+    resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
+    dev: true
+
   /@types/node/18.11.18:
     resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==}
+    dev: true
+
+  /@vicons/carbon/0.12.0:
+    resolution: {integrity: sha512-kCOgr/ZOhZzoiFLJ8pwxMa2TMxrkCUOA22qExPabus35F4+USqzcsxaPoYtqRd9ROOYiHrSqwapak/ywF0D9bg==}
     dev: true
 
   /@vitejs/plugin-vue/4.0.0_vite@4.0.4+vue@3.2.45:

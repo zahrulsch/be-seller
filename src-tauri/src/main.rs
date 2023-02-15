@@ -11,9 +11,9 @@ mod state;
 mod utils;
 
 use ipc::{
-    add_config_shopee, crawl_by_keywords, edit_config_shopee, get_config_shopee,
-    get_data_login_bigseller, get_filter_config, login_bigseller, remove_config_shopee,
-    run_migration,
+    add_config_shopee, crawl_by_keywords, edit_config_shopee, get_col_db, get_config_shopee,
+    get_data_login_bigseller, get_filter_config, get_product_list, get_profiles, login_bigseller,
+    remove_config_shopee, run_migration,
 };
 use sea_orm::Database;
 use state::OhMyState;
@@ -42,7 +42,10 @@ async fn main() {
             remove_config_shopee,
             crawl_by_keywords,
             get_data_login_bigseller,
-            login_bigseller
+            login_bigseller,
+            get_profiles,
+            get_col_db,
+            get_product_list
         ])
         .run(tauri::generate_context!())
         .expect("error while running be seller application");

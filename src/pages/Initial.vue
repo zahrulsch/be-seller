@@ -13,13 +13,18 @@ import category from "../assets/category.png";
 import market from "../assets/market.png";
 import bigseller from "../assets/bigseller.png";
 import list from "../assets/list.png";
+import url from "../assets/url.png";
+import inpt from "../assets/input.png";
+import upload from "../assets/upload.png";
 import GrabByKeyword from "../components/GrabByKeyword.vue";
 import BigSellerLoginModal from "../components/BigSellerLoginModal.vue";
 import ProfileList from "../components/ProfileList.vue";
+import CollectionFromDb from "../components/CollectionFromDb.vue";
 
 const openGrabByKwd = ref(false);
 const openBigSellerLogin = ref(false);
 const openListProfile = ref(false);
+const openCollFromDb = ref(false);
 
 const menus = [
 	{
@@ -51,6 +56,21 @@ const menus = [
 		uri: "",
 		active: false,
 	},
+	{
+		title: "Ambil Berdasarkan URL",
+		desc: "Kumpulkan data dari daftar URL",
+		cover: url,
+		uri: "",
+		active: true,
+	},
+	{
+		title: "Kelola Koleksi",
+		desc: "Kelola koleksi dari hasil grab yang sudah ada",
+		cover: inpt,
+		uri: "",
+		active: true,
+		action: () => (openCollFromDb.value = !openCollFromDb.value),
+	},
 ];
 
 const secondaryMenus = [
@@ -64,11 +84,18 @@ const secondaryMenus = [
 	},
 	{
 		title: "List Akun Big Seller",
-		desc: "Buka menu untuk mendapatakan informasi lengkap tentang profile Big Seller",
+		desc: "Buka menu untuk dapatakan informasi lengkap tentang profile Big Seller",
 		cover: list,
 		uri: "",
 		active: true,
 		action: () => (openListProfile.value = !openListProfile.value),
+	},
+	{
+		title: "Uploader Big Seller",
+		desc: "Gunakan uploader Big Seller untuk upload ke semua atau beberapa profile",
+		cover: upload,
+		uri: "/bs-upload",
+		active: true,
 	},
 ];
 </script>
@@ -76,11 +103,12 @@ const secondaryMenus = [
 <template>
 	<div class="container">
 		<div class="primer_container">
+			<CollectionFromDb v-model:show="openCollFromDb" />
 			<ProfileList v-model:show="openListProfile" />
 			<GrabByKeyword v-model:show="openGrabByKwd" />
 			<BigSellerLoginModal v-model:show="openBigSellerLogin" />
 			<TypographyTitle :level="5">Daftar Menu</TypographyTitle>
-			<Space size="middle">
+			<Space style="flex-wrap: wrap; width: 100%" size="middle">
 				<RouterLink :to="menu.uri" v-for="menu in menus" :key="menu.title">
 					<Card
 						:class="!menu.active && 'menu_card_off'"
@@ -117,38 +145,42 @@ const secondaryMenus = [
 			<Divider dashed />
 			<TypographyTitle :level="5">Fitur Big Seller</TypographyTitle>
 			<Space size="middle">
-				<Card
+				<RouterLink
+					:to="menu.uri"
 					v-for="menu in secondaryMenus"
 					:key="menu.title"
-					:title="menu.title"
-					:class="!menu.active && 'menu_card_off'"
-					:hoverable="menu.active"
-					size="small"
-					class="menu_card"
-					@click="menu.action"
 				>
-					<template #cover>
-						<img class="image" :src="menu.cover" :alt="menu.title" />
-						<Divider
-							style="margin-block: 0; margin-bottom: 4px"
-							plain
-							dashed
-						/>
-					</template>
-					<Card.Meta>
-						<template #description>
-							<TypographyParagraph
-								style="margin-bottom: 3px"
-								type="secondary"
-								:ellipsis="{
-									rows: 2,
-									tooltip: true,
-								}"
-								:content="menu.desc"
-							></TypographyParagraph>
+					<Card
+						:title="menu.title"
+						:class="!menu.active && 'menu_card_off'"
+						:hoverable="menu.active"
+						size="small"
+						class="menu_card"
+						@click="menu.action"
+					>
+						<template #cover>
+							<img class="image" :src="menu.cover" :alt="menu.title" />
+							<Divider
+								style="margin-block: 0; margin-bottom: 4px"
+								plain
+								dashed
+							/>
 						</template>
-					</Card.Meta>
-				</Card>
+						<Card.Meta>
+							<template #description>
+								<TypographyParagraph
+									style="margin-bottom: 3px"
+									type="secondary"
+									:ellipsis="{
+										rows: 2,
+										tooltip: true,
+									}"
+									:content="menu.desc"
+								></TypographyParagraph>
+							</template>
+						</Card.Meta>
+					</Card>
+				</RouterLink>
 			</Space>
 		</div>
 	</div>
@@ -165,8 +197,6 @@ const secondaryMenus = [
 	overflow-x: hidden;
 	.primer_container {
 		box-sizing: border-box;
-		width: min-content;
-		max-width: 1500px;
 		padding: 20px;
 		display: flex;
 		column-gap: 7px;

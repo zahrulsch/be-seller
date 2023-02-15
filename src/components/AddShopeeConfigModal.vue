@@ -25,7 +25,7 @@ const name = ref<string>("");
 		@update:visible="(v) => emits('update:show', v)"
 		cancel-text="Batal"
 		:mask-style="{
-			backgroundColor: '#e5e5e573',
+			backgroundColor: 'rgba(0, 0, 0, .08)',
 		}"
 		transition-name=""
 		@ok="
